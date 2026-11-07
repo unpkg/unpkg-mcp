@@ -329,6 +329,18 @@ describe("MCP protocol end-to-end (stubbed npm/UNPKG)", () => {
     expect(elements["login-snippet"]?.textContent).toContain("MCP: List Servers");
   });
 
+  it("serves the privacy page and links it from the landing footer", async () => {
+    let privacy = await worker.fetch(new Request("http://localhost/privacy"), {});
+    expect(privacy.status).toBe(200);
+    expect(privacy.headers.get("Content-Type")).toContain("text/html");
+    let privacyText = await privacy.text();
+    expect(privacyText).toContain("Privacy — UNPKG MCP");
+    expect(privacyText).toContain("What we never collect");
+
+    let landing = await worker.fetch(new Request("http://localhost/"), {});
+    expect(await landing.text()).toContain('href="/privacy"');
+  });
+
   it("serves robots.txt and sitemap.xml for crawlers", async () => {
     let robots = await worker.fetch(new Request("http://localhost/robots.txt"), {});
     expect(robots.status).toBe(200);
