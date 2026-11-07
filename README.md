@@ -130,9 +130,7 @@ rather than a single figure.
 ## MCP Registry
 
 `server.json` in this repo is the listing manifest for the official
-MCP Registry, under the namespace `io.github.unpkg/unpkg-mcp`. The
-`version` field tracks the server version in `package.json` /
-`src/version.ts`; bump all three together.
+MCP Registry, under the namespace `io.github.unpkg/unpkg-mcp`.
 
 Publishing (maintainers): install the `mcp-publisher` CLI from the
 MCP Registry project, then from this repo:
@@ -141,6 +139,36 @@ MCP Registry project, then from this repo:
 mcp-publisher login github
 mcp-publisher publish
 ```
+
+Note: the organization namespace requires an owner-level GitHub
+credential — the interactive device flow only grants your personal
+namespace. Use a classic PAT with `read:org` scope (see the MCP
+Registry authentication docs), and revoke it afterwards.
+
+## Releasing
+
+The server is a remote endpoint, so most channels update themselves:
+connected clients see new tools as soon as the Worker deploys, Glama
+re-crawls this repo and the endpoint, skills.sh serves the skill from
+GitHub, and directory listings (awesome lists, mcp.so) are static
+entries that only change if the URL or description changes.
+
+For a version release:
+
+1. Bump the version everywhere it appears, keeping all of them equal:
+   `package.json`, `src/version.ts`, `server.json`,
+   `plugin/.claude-plugin/plugin.json`, and the plugin entry in
+   `.claude-plugin/marketplace.json`. (A unit test already fails if
+   `package.json` and `src/version.ts` drift.)
+2. Deploy the Worker (`wrangler deploy`).
+3. Tag the release on GitHub (`vX.Y.Z` with release notes).
+4. Republish the registry manifest: `mcp-publisher publish`.
+   Downstream directories (PulseMCP, Smithery, and others) ingest
+   from the official MCP Registry, so this is the step that updates
+   them.
+5. If the plugin changed, publish the new plugin version in the
+   Claude developer portal; marketplace users get it via
+   `claude plugin marketplace update`.
 
 ## Claude plugin
 
