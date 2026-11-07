@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "unpkg",
-      "source": "./",
+      "source": "./plugin",
       "description": "Live npm and UNPKG data for AI agents: package resolution, project audits, import maps, and malware/CVE checks.",
       "version": "1.0.0",
       "author": {
