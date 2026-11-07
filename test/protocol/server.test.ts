@@ -353,6 +353,13 @@ describe("MCP protocol end-to-end (stubbed npm/UNPKG)", () => {
     expect(await landing.text()).toContain('href="/terms"');
   });
 
+  it("serves the OpenAI domain-verification challenge as plain text", async () => {
+    let challenge = await worker.fetch(new Request("http://localhost/.well-known/openai-apps-challenge"), {});
+    expect(challenge.status).toBe(200);
+    expect(challenge.headers.get("Content-Type")).toContain("text/plain");
+    expect(await challenge.text()).toBe("95BHLv4vv5wvt54s06JwdirJPB9MOZExPUOqIk1pd1M");
+  });
+
   it("serves robots.txt and sitemap.xml for crawlers", async () => {
     let robots = await worker.fetch(new Request("http://localhost/robots.txt"), {});
     expect(robots.status).toBe(200);

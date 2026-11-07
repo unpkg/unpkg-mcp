@@ -592,6 +592,12 @@ export default {
         { headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=86400" } },
       );
     }
+    if (url.pathname === "/.well-known/openai-apps-challenge" && request.method === "GET") {
+      // OpenAI plugin directory domain verification for mcp.unpkg.com.
+      return new Response("95BHLv4vv5wvt54s06JwdirJPB9MOZExPUOqIk1pd1M", {
+        headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=300" },
+      });
+    }
     if (url.pathname === "/.well-known/mcp.json" && request.method === "GET") {
       return Response.json(SERVER_CARD, { headers: { "Cache-Control": "public, max-age=300" } });
     }
