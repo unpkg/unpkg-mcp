@@ -240,6 +240,7 @@ email-verified and approved from the Shield beta waitlist.</p>
 <a href="https://unpkg.com/llms.txt">llms.txt</a>
 <a href="https://shield.unpkg.com">UNPKG Shield</a>
 <a href="/privacy">Privacy</a>
+<a href="/terms">Terms</a>
 </div></footer>
 
 <script>
@@ -417,6 +418,79 @@ footer.site .wrap{display:flex;gap:1.5rem;flex-wrap:wrap}
 </body></html>`;
 }
 
+function termsHtml(gaId?: string): string {
+  let ga = gaId
+    ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+if (location.hostname === "mcp.unpkg.com") {
+  gtag('js', new Date());
+  gtag('config', '${gaId}');
+}
+</script>`
+    : "";
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Terms of Service — UNPKG MCP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Terms of service for the UNPKG MCP server.">
+<style>
+:root{--ink:#0e1a23;--accent-deep:#264a56;--paper:#fbfaf7;--hairline:#ede7dc;--dark-link:#9cc2cc}
+*{box-sizing:border-box}
+body{font-family:ui-sans-serif,system-ui,sans-serif;background:var(--paper);color:var(--ink);margin:0;line-height:1.65}
+a{color:var(--accent-deep)}
+.wrap{max-width:62rem;margin:0 auto;padding:0 1.5rem}
+header.site{background:var(--ink);color:#fff}
+header.site .wrap{display:flex;align-items:center;gap:1rem;padding-top:1rem;padding-bottom:1rem;flex-wrap:wrap}
+.wordmark{font-weight:800;letter-spacing:.04em;font-size:1.25rem;color:#fff;text-decoration:none}
+.wordmark span{color:var(--dark-link);font-weight:600}
+main{padding:2.5rem 0 3rem}
+h1{font-size:2.2rem;line-height:1.15;margin:0 0 .5rem;font-weight:800}
+h2{font-size:1.35rem;margin:2rem 0 .6rem;font-weight:750}
+p,li{max-width:46rem}
+.updated{opacity:.75;margin:0 0 1.5rem}
+footer.site{border-top:1px solid var(--hairline);padding:2rem 0 3rem;font-size:.92rem}
+footer.site .wrap{display:flex;gap:1.5rem;flex-wrap:wrap}
+</style>${ga}</head>
+<body>
+<header class="site"><div class="wrap"><a class="wordmark" href="/">UNPKG <span>MCP</span></a></div></header>
+<main><div class="wrap">
+<h1>Terms of Service — UNPKG MCP</h1>
+<p class="updated">Last updated: November 7, 2026</p>
+<p>These terms cover the UNPKG MCP server at <code>https://mcp.unpkg.com</code>, operated by UNPKG ("we", "us"). By connecting a client to the server, you agree to them.</p>
+
+<h2>The service</h2>
+<p>The UNPKG MCP server provides AI agents with live npm and UNPKG data: package version and file resolution, project dependency audits, import-map generation and validation, migration estimates, and malware/CVE checks for exact package versions. Most tools are available anonymously, free of charge. Optional tools require signing in with an UNPKG Shield account approved from the beta waitlist.</p>
+<p>Package data comes from the npm registry, UNPKG, and third-party malware and vulnerability feeds. We work to keep it accurate and current, but package metadata, verdicts, and estimates are provided for information only. Estimates are ranges based on stated assumptions, not guarantees of bandwidth, cost, or performance outcomes.</p>
+
+<h2>Acceptable use</h2>
+<ul>
+<li>Do not use the service to disrupt, overload, or probe it beyond ordinary client use, or to attempt to access another organization's Shield data.</li>
+<li>Do not misrepresent automated output from the service as independently verified fact where accuracy matters (for example, security or legal decisions) without checking the underlying sources.</li>
+<li>Automated use through MCP clients and agents is expected and welcome; we may apply reasonable rate limits to keep the service available to everyone.</li>
+</ul>
+
+<h2>Shield accounts</h2>
+<p>Shield features are scoped to your own organization. You are responsible for activity under your account and for revoking OAuth grants (from your MCP client or Shield account) when they are no longer needed.</p>
+
+<h2>Availability and changes</h2>
+<p>The service is provided "as is" and "as available", without warranties of any kind. We may change, suspend, or discontinue features, and may update these terms; material changes will be noted by the date above. Continued use after a change takes effect constitutes acceptance.</p>
+
+<h2>Liability</h2>
+<p>To the maximum extent permitted by law, UNPKG is not liable for indirect, incidental, or consequential damages arising from use of the service or reliance on its output.</p>
+
+<h2>Contact</h2>
+<p>UNPKG — <a href="mailto:support@unpkg.com">support@unpkg.com</a></p>
+</div></main>
+<footer class="site"><div class="wrap">
+<a href="/">UNPKG MCP</a>
+<a href="https://unpkg.com">unpkg.com</a>
+<a href="https://shield.unpkg.com">UNPKG Shield</a>
+<a href="/privacy">Privacy</a>
+</div></footer>
+</body></html>`;
+}
+
 /** Self-description in the emerging MCP server-card shape. */
 export const SERVER_CARD = {
   name: "unpkg-mcp",
@@ -485,6 +559,9 @@ export default {
     if (url.pathname === "/privacy" && request.method === "GET") {
       return new Response(privacyHtml(env.GA_MEASUREMENT_ID), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
+    if (url.pathname === "/terms" && request.method === "GET") {
+      return new Response(termsHtml(env.GA_MEASUREMENT_ID), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
     if (url.pathname === "/robots.txt" && request.method === "GET") {
       return new Response(
         "User-agent: *\nAllow: /\n\nSitemap: https://mcp.unpkg.com/sitemap.xml\n",
@@ -502,6 +579,11 @@ export default {
   </url>
   <url>
     <loc>https://mcp.unpkg.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://mcp.unpkg.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
