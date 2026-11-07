@@ -341,6 +341,18 @@ describe("MCP protocol end-to-end (stubbed npm/UNPKG)", () => {
     expect(await landing.text()).toContain('href="/privacy"');
   });
 
+  it("serves the terms page and links it from the landing footer", async () => {
+    let terms = await worker.fetch(new Request("http://localhost/terms"), {});
+    expect(terms.status).toBe(200);
+    expect(terms.headers.get("Content-Type")).toContain("text/html");
+    let termsText = await terms.text();
+    expect(termsText).toContain("Terms of Service — UNPKG MCP");
+    expect(termsText).toContain("Acceptable use");
+
+    let landing = await worker.fetch(new Request("http://localhost/"), {});
+    expect(await landing.text()).toContain('href="/terms"');
+  });
+
   it("serves robots.txt and sitemap.xml for crawlers", async () => {
     let robots = await worker.fetch(new Request("http://localhost/robots.txt"), {});
     expect(robots.status).toBe(200);
