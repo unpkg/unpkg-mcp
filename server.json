@@ -14,5 +14,14 @@
       "type": "streamable-http",
       "url": "https://mcp.unpkg.com/mcp"
     }
+  ],
+  "icons": [
+    {
+      "src": "https://unpkg.com/favicon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "256x256"
+      ]
+    }
   ]
 }
