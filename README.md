@@ -1,5 +1,7 @@
 # unpkg-mcp
 
+[![UNPKG MCP connector – tool definition quality and endpoint health on Glama](https://glama.ai/mcp/connectors/com.unpkg.mcp/unpkg/badges/score.svg)](https://glama.ai/mcp/connectors/com.unpkg.mcp/unpkg)
+
 A remote [MCP](https://modelcontextprotocol.io) server for UNPKG. It gives AI
 agents live npm and UNPKG data for direct UNPKG file lookups:
 `https://unpkg.com/<package>@<version>/<file>`.
