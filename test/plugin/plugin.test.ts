@@ -24,10 +24,36 @@ describe("Claude plugin bundle (plugin/)", () => {
     expect(existsSync("plugin/.claude-plugin/icon.png")).toBe(true);
   });
 
+  it("declares a valid OpenAI (ChatGPT/Codex) package in the same folder", () => {
+    let portable = JSON.parse(read("plugin/plugin.json"));
+    expect(portable.name).toBe("unpkg");
+    let ui = portable.extensions["com.openai"].interface;
+    expect(ui.displayName).toBe("UNPKG");
+    expect(ui.privacyPolicyURL).toBe("https://mcp.unpkg.com/privacy");
+    expect(ui.termsOfServiceURL).toBe("https://mcp.unpkg.com/terms");
+    expect(ui.supportURL).toBe("https://github.com/unpkg/unpkg-mcp/issues");
+    expect(ui.websiteURL).toBe("https://mcp.unpkg.com/");
+    let review = portable.extensions["com.openai"].review;
+    expect(review.test_cases.positive.length).toBe(5);
+    expect(review.test_cases.negative.length).toBe(3);
+
+    let mcp = JSON.parse(read("plugin/mcp.json"));
+    expect(mcp.mcpServers.unpkg.type).toBe("streamable-http");
+    expect(mcp.mcpServers.unpkg.url).toBe("https://mcp.unpkg.com/mcp");
+    let auth = mcp.mcpServers.unpkg.extensions["com.openai"].auth;
+    expect(auth.type).toBe("mixed");
+    expect(auth.client.mode).toBe("dcr");
+
+    for (let asset of ["icon.png", "icon-dark.png", "logo.png", "logo-dark.png"]) {
+      expect(existsSync(`plugin/assets/${asset}`)).toBe(true);
+    }
+  });
+
   it("keeps every version field in sync", () => {
     let version = JSON.parse(read("package.json")).version;
     expect(JSON.parse(read("server.json")).version).toBe(version);
     expect(JSON.parse(read("plugin/.claude-plugin/plugin.json")).version).toBe(version);
+    expect(JSON.parse(read("plugin/plugin.json")).version).toBe(version);
     let marketplace = JSON.parse(read(".claude-plugin/marketplace.json"));
     expect(marketplace.plugins[0].version).toBe(version);
     expect(read("src/version.ts")).toContain(`VERSION = "${version}"`);

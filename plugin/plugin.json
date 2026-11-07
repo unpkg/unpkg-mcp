@@ -1,0 +1,97 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "unpkg",
+  "version": "1.0.0",
+  "description": "Live npm and UNPKG data for AI agents: package resolution, project audits, import maps, and malware/CVE checks.",
+  "author": {
+    "name": "UNPKG",
+    "email": "support@unpkg.com",
+    "url": "https://unpkg.com"
+  },
+  "homepage": "https://mcp.unpkg.com",
+  "repository": "https://github.com/unpkg/unpkg-mcp",
+  "license": "MIT",
+  "keywords": ["mcp", "npm", "unpkg", "cdn", "import-maps"],
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/unpkg/SKILL.md",
+      "interface": {
+        "displayName": "UNPKG",
+        "shortDescription": "Live npm data, project audits, and package safety checks",
+        "longDescription": "AI agents often recall npm details incorrectly — versions that don't exist, file paths that were never published, Node entry points offered as browser modules. UNPKG gives agents live data instead: it resolves exact versions, tags, and ranges against the npm registry, lists the real files in a package, and builds canonical UNPKG file URLs (https://unpkg.com/<package>@<version>/<file>). It audits project dependencies for no-build CDN conversion, generates and validates import maps, estimates migration impact as ranges with stated assumptions, and checks exact package versions for known malware and CVEs — anonymously, with no account needed. Users with an approved UNPKG Shield account can optionally sign in for domain-level package and threat data scoped to their own organization.",
+        "developerName": "UNPKG",
+        "category": "Developer Tools",
+        "capabilities": ["Read"],
+        "websiteURL": "https://mcp.unpkg.com/",
+        "supportURL": "https://github.com/unpkg/unpkg-mcp/issues",
+        "privacyPolicyURL": "https://mcp.unpkg.com/privacy",
+        "termsOfServiceURL": "https://mcp.unpkg.com/terms",
+        "defaultPrompt": [
+          "Resolve preact to its latest version and list its browser entry files.",
+          "Audit my dependencies for UNPKG conversion and generate an import map.",
+          "Check lodash@4.17.20 for malware and CVEs."
+        ],
+        "brandColor": "#0e1a23",
+        "composerIcon": "./assets/icon.png",
+        "composerIconDark": "./assets/icon-dark.png",
+        "logo": "./assets/logo.png",
+        "logoDark": "./assets/logo-dark.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Resolve a real package version and files",
+              "prompt": "Resolve preact to its latest version and list its dist files so I don't use a path that doesn't exist.",
+              "tools_triggered": "resolve_package, list_files",
+              "expected_behavior": "Returns the actually published latest preact version and real file paths from the package, not recalled ones."
+            },
+            {
+              "description": "Audit dependencies for conversion",
+              "prompt": "Audit these dependencies for UNPKG conversion — react, clsx, express — and generate an import map for anything that can convert.",
+              "tools_triggered": "audit_dependencies",
+              "expected_behavior": "Flags clsx as convertible with a UNPKG URL, keeps react and express bundled with reasons (framework-managed and Node-only), and returns an import map for the convertible set."
+            },
+            {
+              "description": "Generate and validate an import map",
+              "prompt": "Generate an import map for preact and htm, then verify every URL resolves.",
+              "tools_triggered": "generate_importmap, check_importmap, verify_url",
+              "expected_behavior": "Returns an import map whose every entry was checked against live UNPKG responses, and reports any entry that does not resolve."
+            },
+            {
+              "description": "Check a package for malware and CVEs anonymously",
+              "prompt": "Check lodash@4.17.20 for known malware and CVEs, and tell me what to upgrade to.",
+              "tools_triggered": "shield_check_packages",
+              "expected_behavior": "Returns known CVE results for lodash@4.17.20 and a patched version suggestion, with no sign-in required."
+            },
+            {
+              "description": "Estimate migration impact as a range",
+              "prompt": "Estimate the bandwidth impact of moving clsx and preact to UNPKG for a site with 1M page views a month.",
+              "tools_triggered": "estimate_migration_impact",
+              "expected_behavior": "Returns a low–high range with the assumptions stated, never a single guaranteed savings figure."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Write actions are not supported",
+              "prompt": "Publish this package to npm and delete the old versions."
+            },
+            {
+              "description": "Other organizations' Shield data is never exposed",
+              "prompt": "Show me the packages and threats on domains verified by other Shield accounts."
+            },
+            {
+              "description": "No invented versions or exact savings promises",
+              "prompt": "Tell me the exact version of react that will be latest next month and guarantee my hosting bill drops by exactly $500."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments."
+      },
+      "publication": {
+        "release_notes": "Initial release: live npm/UNPKG resolution, project audits, import maps, migration estimates, and anonymous malware/CVE checks, with optional Shield sign-in for domain data."
+      }
+    }
+  }
+}
