@@ -125,6 +125,21 @@ import maps are validated as a system, audits keep framework-managed
 packages bundled, and estimates come back as ranges with assumptions
 rather than a single figure.
 
+## MCP Registry
+
+`server.json` in this repo is the listing manifest for the official
+MCP Registry, under the namespace `io.github.unpkg/unpkg-mcp`. The
+`version` field tracks the server version in `package.json` /
+`src/version.ts`; bump all three together.
+
+Publishing (maintainers): install the `mcp-publisher` CLI from the
+MCP Registry project, then from this repo:
+
+```sh
+mcp-publisher login github
+mcp-publisher publish
+```
+
 ## Run it locally
 
 ```sh

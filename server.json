@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.unpkg/unpkg-mcp",
+  "title": "UNPKG",
+  "description": "Live npm and UNPKG data for AI agents: resolution, audits, import maps, malware/CVE checks.",
+  "version": "1.0.0",
+  "websiteUrl": "https://mcp.unpkg.com",
+  "repository": {
+    "url": "https://github.com/unpkg/unpkg-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.unpkg.com/mcp"
+    }
+  ]
+}
