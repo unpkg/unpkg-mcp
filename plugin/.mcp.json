@@ -1,6 +1,7 @@
 {
   "mcpServers": {
     "unpkg": {
+      "type": "http",
       "url": "https://mcp.unpkg.com/mcp"
     }
   }

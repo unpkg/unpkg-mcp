@@ -57,7 +57,10 @@ describe("Claude plugin bundle (plugin/)", () => {
     expect(codex.mcpServers).toBe("./.mcp.json");
     expect(codex.interface.displayName).toBe("UNPKG");
     let servers = JSON.parse(read("plugin/.mcp.json"));
-    expect(servers.mcpServers.unpkg.url).toBe("https://mcp.unpkg.com/mcp");
+    expect(servers.mcpServers.unpkg).toEqual({
+      type: "http",
+      url: "https://mcp.unpkg.com/mcp",
+    });
   });
 
   it("keeps every version field in sync", () => {
