@@ -1,0 +1,24 @@
+{
+  "name": "unpkg",
+  "owner": {
+    "name": "UNPKG",
+    "url": "https://unpkg.com"
+  },
+  "description": "Official UNPKG plugins for Claude Code.",
+  "plugins": [
+    {
+      "name": "unpkg",
+      "source": "./",
+      "description": "Live npm and UNPKG data for AI agents: package resolution, project audits, import maps, and malware/CVE checks.",
+      "version": "1.0.0",
+      "author": {
+        "name": "UNPKG",
+        "url": "https://unpkg.com"
+      },
+      "homepage": "https://mcp.unpkg.com",
+      "repository": "https://github.com/unpkg/unpkg-mcp",
+      "license": "MIT",
+      "keywords": ["mcp", "npm", "unpkg", "cdn", "import-maps"]
+    }
+  ]
+}
