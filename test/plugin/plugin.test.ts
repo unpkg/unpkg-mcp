@@ -29,6 +29,7 @@ describe("Claude plugin bundle (plugin/)", () => {
     expect(portable.name).toBe("unpkg");
     let ui = portable.extensions["com.openai"].interface;
     expect(ui.displayName).toBe("UNPKG");
+    expect(ui.shortDescription.length).toBeLessThanOrEqual(30);
     expect(ui.privacyPolicyURL).toBe("https://mcp.unpkg.com/privacy");
     expect(ui.termsOfServiceURL).toBe("https://mcp.unpkg.com/terms");
     expect(ui.supportURL).toBe("https://github.com/unpkg/unpkg-mcp/issues");

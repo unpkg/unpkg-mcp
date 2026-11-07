@@ -17,7 +17,7 @@
       "onboardingSkill": "./skills/unpkg/SKILL.md",
       "interface": {
         "displayName": "UNPKG",
-        "shortDescription": "Live npm data, project audits, and package safety checks",
+        "shortDescription": "Live npm data for AI agents",
         "longDescription": "AI agents often recall npm details incorrectly — versions that don't exist, file paths that were never published, Node entry points offered as browser modules. UNPKG gives agents live data instead: it resolves exact versions, tags, and ranges against the npm registry, lists the real files in a package, and builds canonical UNPKG file URLs (https://unpkg.com/<package>@<version>/<file>). It audits project dependencies for no-build CDN conversion, generates and validates import maps, estimates migration impact as ranges with stated assumptions, and checks exact package versions for known malware and CVEs — anonymously, with no account needed. Users with an approved UNPKG Shield account can optionally sign in for domain-level package and threat data scoped to their own organization.",
         "developerName": "UNPKG",
         "category": "Developer Tools",
