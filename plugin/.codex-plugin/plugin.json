@@ -1,0 +1,38 @@
+{
+  "name": "unpkg",
+  "version": "1.0.0",
+  "description": "Live npm and UNPKG data for AI agents: package resolution, project audits, import maps, and malware/CVE checks.",
+  "author": {
+    "name": "UNPKG",
+    "email": "support@unpkg.com",
+    "url": "https://unpkg.com"
+  },
+  "homepage": "https://mcp.unpkg.com",
+  "repository": "https://github.com/unpkg/unpkg-mcp",
+  "license": "MIT",
+  "keywords": ["mcp", "npm", "unpkg", "cdn", "import-maps"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "UNPKG",
+    "shortDescription": "Live npm data for AI agents",
+    "longDescription": "AI agents often recall npm details incorrectly — versions that don't exist, file paths that were never published, Node entry points offered as browser modules. UNPKG gives agents live data instead: it resolves exact versions, tags, and ranges against the npm registry, lists the real files in a package, and builds canonical UNPKG file URLs (https://unpkg.com/<package>@<version>/<file>). It audits project dependencies for no-build CDN conversion, generates and validates import maps, estimates migration impact as ranges with stated assumptions, and checks exact package versions for known malware and CVEs — anonymously, with no account needed. Users with an approved UNPKG Shield account can optionally sign in for domain-level package and threat data scoped to their own organization.",
+    "developerName": "UNPKG",
+    "category": "Developer Tools",
+    "capabilities": ["Read"],
+    "websiteURL": "https://mcp.unpkg.com/",
+    "supportURL": "https://github.com/unpkg/unpkg-mcp/issues",
+    "privacyPolicyURL": "https://mcp.unpkg.com/privacy",
+    "termsOfServiceURL": "https://mcp.unpkg.com/terms",
+    "defaultPrompt": [
+      "Resolve preact to its latest version and list its browser entry files.",
+      "Audit my dependencies for UNPKG conversion and generate an import map.",
+      "Check lodash@4.17.20 for malware and CVEs."
+    ],
+    "brandColor": "#0e1a23",
+    "composerIcon": "./assets/icon.png",
+    "composerIconDark": "./assets/icon-dark.png",
+    "logo": "./assets/logo.png",
+    "logoDark": "./assets/logo-dark.png"
+  }
+}
