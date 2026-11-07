@@ -142,6 +142,20 @@ mcp-publisher login github
 mcp-publisher publish
 ```
 
+## Claude plugin
+
+This repo is also a Claude Code plugin (and its own plugin marketplace).
+It bundles the MCP server above with the `unpkg` skill, so one install
+gives Claude Code both:
+
+```sh
+claude plugin marketplace add unpkg/unpkg-mcp
+claude plugin install unpkg@unpkg
+```
+
+Connecting the plugin is the same anonymous-by-default server at
+`https://mcp.unpkg.com/mcp`; Shield tools still sign in only when used.
+
 ## Run it locally
 
 ```sh
