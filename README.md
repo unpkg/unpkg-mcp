@@ -145,8 +145,8 @@ mcp-publisher publish
 ## Claude plugin
 
 This repo is also a Claude Code plugin (and its own plugin marketplace).
-It bundles the MCP server above with the `unpkg` skill, so one install
-gives Claude Code both:
+The plugin lives in `plugin/` and bundles the MCP server above with the
+`unpkg` skill, so one install gives Claude Code both:
 
 ```sh
 claude plugin marketplace add unpkg/unpkg-mcp
