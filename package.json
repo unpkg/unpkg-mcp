@@ -1,5 +1,5 @@
 {
-  "name": "unpkg-mcp",
+  "name": "unpkg-mcp-worker",
   "version": "1.0.0",
   "description": "Remote MCP server for UNPKG: live npm resolution, file discovery, and project audits for direct UNPKG file lookups",
   "private": true,
