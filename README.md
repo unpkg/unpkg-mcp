@@ -157,9 +157,10 @@ For a version release:
 
 1. Bump the version everywhere it appears, keeping all of them equal:
    `package.json`, `src/version.ts`, `server.json`,
-   `plugin/.claude-plugin/plugin.json`, `plugin/plugin.json`, and the
-   plugin entry in `.claude-plugin/marketplace.json`. (Tests fail if
-   any of these drift.)
+   `plugin/.claude-plugin/plugin.json`, `plugin/plugin.json`,
+   `plugin/.codex-plugin/plugin.json`, and the plugin entry in
+   `.claude-plugin/marketplace.json`. (Tests fail if any of these
+   drift.)
 2. Deploy the Worker (`wrangler deploy`).
 3. Tag the release on GitHub (`vX.Y.Z` with release notes).
 4. Republish the registry manifest: `mcp-publisher publish`.

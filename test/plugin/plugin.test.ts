@@ -50,11 +50,22 @@ describe("Claude plugin bundle (plugin/)", () => {
     }
   });
 
+  it("includes the Codex compatibility overlay so local installs load the MCP server", () => {
+    let codex = JSON.parse(read("plugin/.codex-plugin/plugin.json"));
+    expect(codex.name).toBe("unpkg");
+    expect(codex.skills).toBe("./skills/");
+    expect(codex.mcpServers).toBe("./.mcp.json");
+    expect(codex.interface.displayName).toBe("UNPKG");
+    let servers = JSON.parse(read("plugin/.mcp.json"));
+    expect(servers.mcpServers.unpkg.url).toBe("https://mcp.unpkg.com/mcp");
+  });
+
   it("keeps every version field in sync", () => {
     let version = JSON.parse(read("package.json")).version;
     expect(JSON.parse(read("server.json")).version).toBe(version);
     expect(JSON.parse(read("plugin/.claude-plugin/plugin.json")).version).toBe(version);
     expect(JSON.parse(read("plugin/plugin.json")).version).toBe(version);
+    expect(JSON.parse(read("plugin/.codex-plugin/plugin.json")).version).toBe(version);
     let marketplace = JSON.parse(read(".claude-plugin/marketplace.json"));
     expect(marketplace.plugins[0].version).toBe(version);
     expect(read("src/version.ts")).toContain(`VERSION = "${version}"`);
