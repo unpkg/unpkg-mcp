@@ -1,0 +1,22 @@
+# Dependencies and build output
+node_modules/
+dist/
+bin/
+
+# Cloudflare / Wrangler local state and secrets
+.wrangler/
+.dev.vars*
+.env*
+
+# Planning and scope docs (kept local, not shipped with the repo)
+docs/
+
+# Logs and coverage
+*.log
+logs/
+coverage/
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/

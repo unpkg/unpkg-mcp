@@ -1,0 +1,70 @@
+{
+  "name": "nobuild-html",
+  "framework": null,
+  "packages": {
+    "preact": {
+      "spec": "10.26.4",
+      "manifest": {
+        "main": "dist/preact.js",
+        "module": "dist/preact.module.js"
+      },
+      "files": [
+        "/dist/preact.module.js"
+      ],
+      "source": "export const h = () => {};"
+    },
+    "htm": {
+      "spec": "3.1.1",
+      "manifest": {
+        "main": "dist/htm.js",
+        "module": "dist/htm.module.js"
+      },
+      "files": [
+        "/dist/htm.module.js"
+      ],
+      "source": "export default function htm() {}"
+    },
+    "express": {
+      "spec": "4.22.3",
+      "manifest": {
+        "main": "index.js",
+        "engines": {
+          "node": ">= 0.10.0"
+        }
+      },
+      "files": [
+        "/index.js",
+        "/lib/express.js"
+      ],
+      "source": "import fs from 'node:fs'; export default fs;"
+    },
+    "@types/node": {
+      "spec": "22.0.0",
+      "manifest": {
+        "types": "index.d.ts"
+      },
+      "files": [
+        "/index.d.ts"
+      ],
+      "source": ""
+    },
+    "remark-gfm": {
+      "spec": "4.0.1",
+      "manifest": {
+        "type": "module",
+        "main": "index.js"
+      },
+      "files": [
+        "/index.js"
+      ],
+      "source": "export { default } from 'mdast-util-gfm';"
+    }
+  },
+  "expected": {
+    "preact": "convert_now",
+    "htm": "convert_now",
+    "express": "keep_bundled",
+    "@types/node": "needs_review",
+    "remark-gfm": "convert_now"
+  }
+}

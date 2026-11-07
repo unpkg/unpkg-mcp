@@ -1,0 +1,43 @@
+{
+  "name": "next-app",
+  "framework": "next",
+  "packages": {
+    "next": {
+      "spec": "14.2.35",
+      "manifest": { "main": "dist/server/next.js" },
+      "files": ["/dist/server/next.js"],
+      "source": ""
+    },
+    "react": {
+      "spec": "18.3.1",
+      "manifest": { "main": "index.js", "exports": { ".": { "require": "./index.js" } } },
+      "files": ["/index.js"],
+      "source": "module.exports = require('./cjs/react.js');"
+    },
+    "react-dom": {
+      "spec": "18.3.1",
+      "manifest": { "main": "index.js" },
+      "files": ["/index.js"],
+      "source": "module.exports = {};"
+    },
+    "clsx": {
+      "spec": "2.1.1",
+      "manifest": { "main": "dist/clsx.js", "module": "dist/clsx.mjs" },
+      "files": ["/dist/clsx.mjs"],
+      "source": "export default function clsx() {}"
+    },
+    "typescript": {
+      "spec": "5.9.3",
+      "manifest": { "main": "lib/typescript.js", "bin": { "tsc": "bin/tsc" } },
+      "files": ["/lib/typescript.js"],
+      "source": ""
+    }
+  },
+  "expected": {
+    "next": "keep_bundled",
+    "react": "keep_bundled",
+    "react-dom": "keep_bundled",
+    "clsx": "convert_now",
+    "typescript": "keep_bundled"
+  }
+}

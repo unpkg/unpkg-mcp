@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "unpkg-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-07-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "logpush": true,
+  // Production lives at mcp.unpkg.com. For local OAuth development run:
+  //   wrangler dev --port 8787 --var SHIELD_API_ORIGIN:http://localhost:8002 OAUTH_ISSUER:http://localhost:8002 OAUTH_RESOURCE:http://localhost:8787/mcp OAUTH_ENABLED:true
+  "routes": [{ "pattern": "mcp.unpkg.com", "custom_domain": true }],
+  "vars": {
+    "GA_MEASUREMENT_ID": "G-Z1JLRS5MPM",
+    "UNPKG_ORIGIN": "https://unpkg.com",
+    "NPM_REGISTRY": "https://registry.npmjs.org",
+    "SHIELD_API_ORIGIN": "https://shield.unpkg.com",
+    "OAUTH_ISSUER": "https://shield.unpkg.com",
+    "OAUTH_RESOURCE": "https://mcp.unpkg.com/mcp",
+    "OAUTH_ENABLED": "true"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "vite-react-no-context",
+  "framework": null,
+  "packages": {
+    "react": {
+      "spec": "18.3.1",
+      "manifest": { "main": "index.js", "exports": { ".": { "require": "./index.js" } } },
+      "files": ["/index.js"],
+      "source": "module.exports = require('./cjs/react.js');"
+    },
+    "react-dom": {
+      "spec": "18.3.1",
+      "manifest": { "main": "index.js" },
+      "files": ["/index.js"],
+      "source": "module.exports = {};"
+    },
+    "vite": {
+      "spec": "6.0.0",
+      "manifest": { "main": "dist/node/index.js", "bin": { "vite": "bin/vite.js" } },
+      "files": ["/dist/node/index.js"],
+      "source": ""
+    },
+    "googleapis": {
+      "spec": "131.0.0",
+      "manifest": { "main": "build/src/index.js", "engines": { "node": ">=14.0.0" } },
+      "files": ["/build/src/index.js"],
+      "source": "module.exports = {};"
+    }
+  },
+  "expected": {
+    "react": "convert_carefully",
+    "react-dom": "convert_carefully",
+    "vite": "keep_bundled",
+    "googleapis": "needs_review"
+  }
+}

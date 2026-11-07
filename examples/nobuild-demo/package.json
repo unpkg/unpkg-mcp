@@ -1,0 +1,20 @@
+{
+  "name": "unpkg-mcp-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "A tiny no-build browser app used to demo the UNPKG MCP audit. Its dependencies are declared but nothing is installed or bundled: the page is meant to load them from UNPKG via an import map.",
+  "scripts": {
+    "serve": "python3 -m http.server 5173"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "clsx": "^2.1.1",
+    "express": "^4.22.0",
+    "htm": "^3.1.1",
+    "preact": "^10.26.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

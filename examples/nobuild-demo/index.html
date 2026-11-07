@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UNPKG MCP demo — nobuild counter</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 3rem auto; max-width: 34rem; padding: 0 1rem; }
+      button { font-size: 1rem; padding: 0.5rem 1rem; margin-right: 0.5rem; cursor: pointer; }
+      .count { font-size: 2rem; font-weight: 700; }
+      .muted { color: #666; }
+    </style>
+    <!--
+      This page intentionally has NO import map yet.
+      The module script below imports bare specifiers (preact, htm, clsx,
+      canvas-confetti) that a browser cannot resolve on its own.
+      Converting this page is the demo task: audit the project with the
+      UNPKG MCP, generate the import map, check it, and verify it here.
+    -->
+  </head>
+  <body>
+    <h1>Nobuild counter</h1>
+    <p class="muted">A Preact + HTM app with no build step. It only runs once its dependencies resolve.</p>
+    <div id="app">Loading… (if this never changes, the imports have not been wired up yet)</div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
