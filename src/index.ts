@@ -239,6 +239,7 @@ email-verified and approved from the Shield beta waitlist.</p>
 <a href="https://unpkg.com">unpkg.com</a>
 <a href="https://unpkg.com/llms.txt">llms.txt</a>
 <a href="https://shield.unpkg.com">UNPKG Shield</a>
+<a href="/privacy">Privacy</a>
 </div></footer>
 
 <script>
@@ -327,6 +328,95 @@ email-verified and approved from the Shield beta waitlist.</p>
 </body></html>`;
 }
 
+function privacyHtml(gaId?: string): string {
+  let ga = gaId
+    ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+if (location.hostname === "mcp.unpkg.com") {
+  gtag('js', new Date());
+  gtag('config', '${gaId}');
+}
+</script>`
+    : "";
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Privacy — UNPKG MCP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What the UNPKG MCP server collects when you or your AI agent use it.">
+<style>
+:root{--ink:#0e1a23;--accent-deep:#264a56;--paper:#fbfaf7;--hairline:#ede7dc;--dark-link:#9cc2cc}
+*{box-sizing:border-box}
+body{font-family:ui-sans-serif,system-ui,sans-serif;background:var(--paper);color:var(--ink);margin:0;line-height:1.65}
+a{color:var(--accent-deep)}
+.wrap{max-width:62rem;margin:0 auto;padding:0 1.5rem}
+header.site{background:var(--ink);color:#fff}
+header.site .wrap{display:flex;align-items:center;gap:1rem;padding-top:1rem;padding-bottom:1rem;flex-wrap:wrap}
+.wordmark{font-weight:800;letter-spacing:.04em;font-size:1.25rem;color:#fff;text-decoration:none}
+.wordmark span{color:var(--dark-link);font-weight:600}
+main{padding:2.5rem 0 3rem}
+h1{font-size:2.2rem;line-height:1.15;margin:0 0 .5rem;font-weight:800}
+h2{font-size:1.35rem;margin:2rem 0 .6rem;font-weight:750}
+p,li{max-width:46rem}
+.updated{opacity:.75;margin:0 0 1.5rem}
+footer.site{border-top:1px solid var(--hairline);padding:2rem 0 3rem;font-size:.92rem}
+footer.site .wrap{display:flex;gap:1.5rem;flex-wrap:wrap}
+</style>${ga}</head>
+<body>
+<header class="site"><div class="wrap"><a class="wordmark" href="/">UNPKG <span>MCP</span></a></div></header>
+<main><div class="wrap">
+<h1>Privacy — UNPKG MCP</h1>
+<p class="updated">Last updated: November 7, 2026</p>
+<p>This page describes what the UNPKG MCP server (<code>https://mcp.unpkg.com</code>) collects when you or your AI agent use it.</p>
+
+<h2>What we receive</h2>
+<p><strong>Tool calls.</strong> When an MCP client calls one of our tools, we record the tool name, whether it succeeded, how long it took, the inputs sent to the tool, and the result returned. Depending on the tool, inputs can include:</p>
+<ul>
+<li>npm package names, version specifiers, and file paths</li>
+<li>Search queries</li>
+<li>UNPKG URLs and import maps you ask us to check</li>
+<li>The dependency list from a <code>package.json</code> you ask us to audit</li>
+<li>Monthly page-view and bandwidth figures you provide for a migration estimate</li>
+<li>Domain names, for the Shield domain tools</li>
+</ul>
+<p>Your MCP server only ever sees the tool calls your agent makes. We do not receive your conversations, prompts, or files except where you (or your agent) include them in a tool call.</p>
+<p><strong>Account identifiers (sign-in only).</strong> If you connect a Shield account, we also record your Shield user ID, organization ID, and the MCP client ID from your OAuth grant, so usage can be attributed to your account. Sign-in is handled by Shield; your password never passes through the MCP server.</p>
+<p><strong>Technical data.</strong> Like any web service, our infrastructure (Cloudflare) processes your IP address, user agent, and request timestamps to deliver the service and keep it reliable.</p>
+<p><strong>Website analytics.</strong> The landing page at <code>mcp.unpkg.com</code> uses Google Analytics, which may set cookies to measure page traffic. The MCP endpoint itself does not set cookies.</p>
+
+<h2>What we never collect</h2>
+<ul>
+<li>Passwords</li>
+<li>OAuth access tokens, refresh tokens, authorization codes, or API keys — these are verified, never logged or stored by the MCP server</li>
+</ul>
+
+<h2>How we use this data</h2>
+<ul>
+<li>Operate, debug, and secure the service</li>
+<li>Understand which tools and packages people use, so we can improve them</li>
+<li>Provide Shield account features, scoped to your own organization</li>
+</ul>
+
+<h2>Your choices</h2>
+<ul>
+<li>Use the server anonymously: most tools work with no account, and anonymous calls are not tied to a Shield identity.</li>
+<li>Disconnect at any time from your MCP client or by revoking the grant in your Shield account.</li>
+</ul>
+
+<h2>Changes</h2>
+<p>We may update this page as the service evolves. Material changes will be noted by the date above.</p>
+
+<h2>Contact</h2>
+<p>UNPKG — <a href="mailto:support@unpkg.com">support@unpkg.com</a></p>
+</div></main>
+<footer class="site"><div class="wrap">
+<a href="/">UNPKG MCP</a>
+<a href="https://unpkg.com">unpkg.com</a>
+<a href="https://shield.unpkg.com">UNPKG Shield</a>
+</div></footer>
+</body></html>`;
+}
+
 /** Self-description in the emerging MCP server-card shape. */
 export const SERVER_CARD = {
   name: "unpkg-mcp",
@@ -392,6 +482,9 @@ export default {
     if (url.pathname === "/" && request.method === "GET") {
       return new Response(landingHtml(env.GA_MEASUREMENT_ID), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
+    if (url.pathname === "/privacy" && request.method === "GET") {
+      return new Response(privacyHtml(env.GA_MEASUREMENT_ID), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
     if (url.pathname === "/robots.txt" && request.method === "GET") {
       return new Response(
         "User-agent: *\nAllow: /\n\nSitemap: https://mcp.unpkg.com/sitemap.xml\n",
@@ -406,6 +499,11 @@ export default {
     <loc>https://mcp.unpkg.com/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://mcp.unpkg.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>
 `,
