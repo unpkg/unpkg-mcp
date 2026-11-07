@@ -19,6 +19,8 @@ describe("Claude plugin bundle (plugin/)", () => {
     });
     expect(manifest.skills).toEqual(["./skills/"]);
     expect(manifest.privacyPolicyUrl).toBe("https://mcp.unpkg.com/privacy");
+    expect(manifest.supportUrl).toBe("https://github.com/unpkg/unpkg-mcp/issues");
+    expect(manifest.documentationUrl).toBe("https://mcp.unpkg.com/");
     expect(existsSync("plugin/.claude-plugin/icon.png")).toBe(true);
   });
 

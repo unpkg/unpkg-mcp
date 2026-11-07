@@ -10,6 +10,8 @@
   "homepage": "https://mcp.unpkg.com",
   "icon": "./.claude-plugin/icon.png",
   "privacyPolicyUrl": "https://mcp.unpkg.com/privacy",
+  "supportUrl": "https://github.com/unpkg/unpkg-mcp/issues",
+  "documentationUrl": "https://mcp.unpkg.com/",
   "repository": "https://github.com/unpkg/unpkg-mcp",
   "license": "MIT",
   "keywords": ["mcp", "npm", "unpkg", "cdn", "import-maps"],
