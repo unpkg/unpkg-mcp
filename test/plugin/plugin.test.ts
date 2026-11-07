@@ -8,6 +8,14 @@ function read(path: string): string {
 describe("Claude plugin bundle (plugin/)", () => {
   it("keeps the bundled skill identical to the canonical skill", () => {
     expect(read("plugin/skills/unpkg/SKILL.md")).toBe(read("skill/unpkg/SKILL.md"));
+    // Root copy for Open Plugins scanners (e.g. cursor.directory), which
+    // look for skills/*/SKILL.md at the repository root.
+    expect(read("skills/unpkg/SKILL.md")).toBe(read("skill/unpkg/SKILL.md"));
+  });
+
+  it("exposes an Open Plugins mcp.json at the repo root", () => {
+    let root = JSON.parse(read("mcp.json"));
+    expect(root.mcpServers.unpkg.url).toBe("https://mcp.unpkg.com/mcp");
   });
 
   it("declares the remote MCP server, skill dir, icon, and privacy URL", () => {
