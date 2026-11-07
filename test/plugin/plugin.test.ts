@@ -24,6 +24,15 @@ describe("Claude plugin bundle (plugin/)", () => {
     expect(existsSync("plugin/.claude-plugin/icon.png")).toBe(true);
   });
 
+  it("keeps every version field in sync", () => {
+    let version = JSON.parse(read("package.json")).version;
+    expect(JSON.parse(read("server.json")).version).toBe(version);
+    expect(JSON.parse(read("plugin/.claude-plugin/plugin.json")).version).toBe(version);
+    let marketplace = JSON.parse(read(".claude-plugin/marketplace.json"));
+    expect(marketplace.plugins[0].version).toBe(version);
+    expect(read("src/version.ts")).toContain(`VERSION = "${version}"`);
+  });
+
   it("marketplace points at the plugin subfolder", () => {
     let marketplace = JSON.parse(read(".claude-plugin/marketplace.json"));
     expect(marketplace.plugins[0].name).toBe("unpkg");
