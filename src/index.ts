@@ -329,27 +329,17 @@ email-verified and approved from the Shield beta waitlist.</p>
 </body></html>`;
 }
 
-function privacyHtml(gaId?: string): string {
-  let ga = gaId
-    ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-if (location.hostname === "mcp.unpkg.com") {
-  gtag('js', new Date());
-  gtag('config', '${gaId}');
-}
-</script>`
-    : "";
+function privacyHtml(): string {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Privacy — UNPKG MCP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="What the UNPKG MCP server collects when you or your AI agent use it.">
+<meta name="description" content="Privacy policy for the UNPKG MCP server: data collected, purposes, recipients, retention, and user controls.">
 <style>
 :root{--ink:#0e1a23;--accent-deep:#264a56;--paper:#fbfaf7;--hairline:#ede7dc;--dark-link:#9cc2cc}
 *{box-sizing:border-box}
 body{font-family:ui-sans-serif,system-ui,sans-serif;background:var(--paper);color:var(--ink);margin:0;line-height:1.65}
 a{color:var(--accent-deep)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em}
 .wrap{max-width:62rem;margin:0 auto;padding:0 1.5rem}
 header.site{background:var(--ink);color:#fff}
 header.site .wrap{display:flex;align-items:center;gap:1rem;padding-top:1rem;padding-bottom:1rem;flex-wrap:wrap}
@@ -358,78 +348,139 @@ header.site .wrap{display:flex;align-items:center;gap:1rem;padding-top:1rem;padd
 main{padding:2.5rem 0 3rem}
 h1{font-size:2.2rem;line-height:1.15;margin:0 0 .5rem;font-weight:800}
 h2{font-size:1.35rem;margin:2rem 0 .6rem;font-weight:750}
+h3{font-size:1.05rem;margin:1.5rem 0 .5rem}
 p,li{max-width:46rem}
 .updated{opacity:.75;margin:0 0 1.5rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin:1rem 0}
+th,td{text-align:left;vertical-align:top;padding:.5rem .6rem;border-bottom:1px solid var(--hairline)}
+th{font-weight:700}
+td.tool{font-family:ui-monospace,Menlo,monospace;font-size:.82rem;white-space:nowrap}
 footer.site{border-top:1px solid var(--hairline);padding:2rem 0 3rem;font-size:.92rem}
 footer.site .wrap{display:flex;gap:1.5rem;flex-wrap:wrap}
-</style>${ga}</head>
+@media (max-width:720px){td.tool{white-space:normal}}
+</style></head>
 <body>
 <header class="site"><div class="wrap"><a class="wordmark" href="/">UNPKG <span>MCP</span></a></div></header>
 <main><div class="wrap">
 <h1>Privacy — UNPKG MCP</h1>
-<p class="updated">Last updated: November 7, 2026</p>
-<p>This page describes what the UNPKG MCP server (<code>https://mcp.unpkg.com</code>) collects when you or your AI agent use it.</p>
+<p class="updated">Last updated: November 9, 2026</p>
+<p>This policy describes how UNPKG (&ldquo;we&rdquo;, &ldquo;us&rdquo;) collects, uses, discloses, and retains information when you or your AI agent use the UNPKG MCP server at <code>https://mcp.unpkg.com</code>, including the MCP endpoint <code>/mcp</code> and the website pages on this host (<code>/</code>, <code>/privacy</code>, <code>/terms</code>). It covers every tool the server currently offers, listed in the table below. Sign-in itself happens at UNPKG Shield (<code>shield.unpkg.com</code>); this policy covers how this MCP server handles information before and after that sign-in, including what it sends to Shield. Contact: <a href="mailto:support@unpkg.com">support@unpkg.com</a>.</p>
 
-<h2>What we receive</h2>
-<p><strong>Tool calls.</strong> When an MCP client calls one of our tools, we record the tool name, whether it succeeded, how long it took, the inputs sent to the tool, and the result returned. Depending on the tool, inputs can include:</p>
+<h2>1. Data we collect and receive</h2>
+
+<h3>1.1 Tool inputs and outputs (tool-call content)</h3>
+<p>When an MCP client calls a tool, we receive that tool&rsquo;s inputs, process them as described in sections 2&ndash;3, and return outputs to your client. We log tool calls as described in section 1.2, and those logs include the inputs and the result returned. The current tools, their inputs, their outputs, and the external services each one contacts are:</p>
+<table>
+<tr><th>Tool</th><th>Inputs we receive</th><th>Outputs returned to your client</th><th>Sent onward to</th></tr>
+<tr><td class="tool">resolve_package</td><td>npm package name; optional version, tag, or range</td><td>Resolved version, dist-tags, entry points, peer dependencies</td><td>npm registry</td></tr>
+<tr><td class="tool">list_files</td><td>Package name; optional version, in-package path, result limit</td><td>File paths and sizes in that package version</td><td>npm registry, UNPKG (<code>unpkg.com</code>)</td></tr>
+<tr><td class="tool">build_file_url</td><td>Package name; optional version, file path, subpath, version policy</td><td>UNPKG file URL, resolved version, whether the file was verified to exist</td><td>npm registry, UNPKG</td></tr>
+<tr><td class="tool">search_packages</td><td>Free-text search query (for example &ldquo;date picker&rdquo;); optional result limit</td><td>Matching packages with browser-readiness notes, entry files, and sizes</td><td>npm registry (search query and package names), UNPKG</td></tr>
+<tr><td class="tool">audit_dependencies</td><td>Dependency map from your <code>package.json</code> (package names and version specifiers); optional framework name; optional existing imports found in your project (bare specifier to current URL, typically from an import map in your HTML, which may include third-party CDN URLs)</td><td>Per-dependency classification, suggested UNPKG URLs, a generated import map, validation results, impact figures, and malware/CVE verdicts for the resolved versions</td><td>npm registry, UNPKG, UNPKG Shield API (resolved package names and versions only, for the safety check)</td></tr>
+<tr><td class="tool">verify_url</td><td>A UNPKG file URL</td><td>Whether it resolves, HTTP status, final URL, content type</td><td>UNPKG (the URL is requested)</td></tr>
+<tr><td class="tool">generate_importmap</td><td>List of entries: bare specifier, package name, optional version and file</td><td>Import map and resolved package versions/files</td><td>npm registry, UNPKG</td></tr>
+<tr><td class="tool">check_importmap</td><td>Import map (bare specifier to URL); optional framework name</td><td>Per-entry validation results and issues</td><td>npm registry, UNPKG (URLs in the map are checked)</td></tr>
+<tr><td class="tool">estimate_migration_impact</td><td>Monthly page views; bytes per page load; optional browser cache rate; optional bandwidth cost per GB in USD</td><td>Estimated bandwidth and cost ranges, assumptions, and caveats</td><td>No external service; computed on our server (still logged per section 1.2)</td></tr>
+<tr><td class="tool">shield_check_packages</td><td>List of exact package name and version pairs. Works anonymously</td><td>Malware verdict and review state, CVE/GHSA identifiers, severity, first patched version</td><td>UNPKG Shield API</td></tr>
+<tr><td class="tool">shield_whoami</td><td>No tool inputs. Requires Shield sign-in</td><td>Your Shield account, organization, and entitlements as returned by Shield</td><td>UNPKG Shield API (with your OAuth token, section 1.3)</td></tr>
+<tr><td class="tool">shield_simulate_request</td><td>Package name and version; optional in-package path, referer URL, and origin URL. Requires Shield sign-in</td><td>Simulated Shield edge decision for that request under your organization&rsquo;s rules</td><td>UNPKG Shield API (with your OAuth token)</td></tr>
+<tr><td class="tool">shield_domain_packages</td><td>Optional domain name verified to your organization; optional threat-annotation flag and lookback days. Requires Shield sign-in</td><td>Your domains and package counts, or packages observed on one of your domains, optionally annotated with verdicts/CVEs and ranked by that domain&rsquo;s traffic</td><td>UNPKG Shield API (with your OAuth token)</td></tr>
+<tr><td class="tool">shield_watchlist_status</td><td>No tool inputs. Requires Shield sign-in</td><td>Your organization&rsquo;s monitored packages, blocklist entries, and pin policies</td><td>UNPKG Shield API (with your OAuth token)</td></tr>
+</table>
+<p>The server also offers three prompts (<code>audit_project_for_unpkg</code>, <code>convert_this_page</code>, <code>find_browser_package</code>) whose arguments are an optional yes/no flag, an HTML file path, and a free-text description of a package need, and two static guidance resources. Prompts and resources return guidance text and make no external requests themselves; any tool calls your agent then makes are covered above.</p>
+<p>Tool inputs are chosen by you or your agent and can reveal information about your project and business &mdash; for example your dependency stack, domains, page-view volumes, and hosting costs. The tools never require personal data such as names or email addresses. Do not include passwords, API keys, access tokens, private source code, or other secrets in tool inputs (including in URLs, referers, or search queries); anything included in a tool call is logged as described below. We only ever see the tool calls your agent makes: we do not receive your conversations, prompts, or local files except where you or your agent include their content in a tool call.</p>
+
+<h3>1.2 Tool-call logs and metadata</h3>
+<p>For every tool call we write a structured server log entry containing: tool name; success or failure (and an error message on failure); duration in milliseconds; item counts where relevant (for example number of dependencies or import-map entries); the full inputs sent to the tool; and, on success, the full result returned. For Shield tools this means Shield outputs &mdash; including account/organization data, domain package lists, watchlist, blocklist, and pin-policy data returned to you &mdash; also appear in these logs. These logs are emitted to our hosting provider&rsquo;s logging systems (Cloudflare Workers Logs and Logpush; see section 3).</p>
+
+<h3>1.3 Account identifiers and OAuth tokens (Shield sign-in only)</h3>
 <ul>
-<li>npm package names, version specifiers, and file paths</li>
-<li>Search queries</li>
-<li>UNPKG URLs and import maps you ask us to check</li>
-<li>The dependency list from a <code>package.json</code> you ask us to audit</li>
-<li>Monthly page-view and bandwidth figures you provide for a migration estimate</li>
-<li>Domain names, for the Shield domain tools</li>
+<li>If you sign in with an UNPKG Shield account, we validate the OAuth access token your client presents and record, in the tool-call logs for that connection, your Shield user ID, organization ID, and MCP client ID, so usage can be attributed to your account. We also read the token&rsquo;s granted scopes (<code>shield:read</code>, <code>shield:simulate</code>) to decide which tools may run.</li>
+<li>To execute a signed-in Shield tool, we forward your access token to the UNPKG Shield API (<code>shield.unpkg.com</code>) on that request only, so Shield can return data scoped to your own organization. We also fetch Shield&rsquo;s public signing keys (JWKS) to validate tokens; that fetch contains no user data.</li>
+<li>Sign-in is handled by Shield. Your password never passes through this MCP server.</li>
 </ul>
-<p>Your MCP server only ever sees the tool calls your agent makes. We do not receive your conversations, prompts, or files except where you (or your agent) include them in a tool call.</p>
-<p><strong>Account identifiers (sign-in only).</strong> If you connect a Shield account, we also record your Shield user ID, organization ID, and the MCP client ID from your OAuth grant, so usage can be attributed to your account. Sign-in is handled by Shield; your password never passes through the MCP server.</p>
-<p><strong>Technical data.</strong> Like any web service, our infrastructure (Cloudflare) processes your IP address, user agent, and request timestamps to deliver the service and keep it reliable.</p>
-<p><strong>Website analytics.</strong> The landing page at <code>mcp.unpkg.com</code> uses Google Analytics, which may set cookies to measure page traffic. The MCP endpoint itself does not set cookies.</p>
 
-<h2>What we never collect</h2>
+<h3>1.4 Technical and network data</h3>
+<p>Like any web service, our hosting and content-delivery provider (Cloudflare) processes standard request metadata to deliver and protect the service: IP address, user agent, request timestamps, requested URL and method, and response status. This metadata is associated in provider logs with requests to the MCP endpoint and website pages. Anonymous tool calls are not tied to a Shield identity, but they are still processed with this request metadata.</p>
+
+<h3>1.5 Website analytics and cookies</h3>
+<p>The website landing page at <code>mcp.unpkg.com/</code> uses Google Analytics, provided by Google. Google Analytics may set first-party cookies (such as <code>_ga</code>) and collect page URL and title, approximate location derived from IP address, device and browser information, referral source, and page-view events, to measure website traffic. Analytics runs only on the landing page. The MCP endpoint (<code>/mcp</code>), this privacy page, and the terms page do not use Google Analytics and do not set cookies. See section 5 for how to opt out.</p>
+
+<h3>What we never collect</h3>
 <ul>
-<li>Passwords</li>
-<li>OAuth access tokens, refresh tokens, authorization codes, or API keys — these are verified, never logged or stored by the MCP server</li>
+<li>Passwords.</li>
+<li>OAuth access tokens, refresh tokens, authorization codes, or API keys in logs or storage &mdash; tokens are verified in memory and forwarded to the Shield API per request as described in section 1.3, and are never logged or stored by this MCP server.</li>
+<li>Chat conversations, prompts, or local files, other than content you or your agent include in a tool call (section 1.1).</li>
+<li>Payment information (we sell nothing through this server), precise location, contacts, or health, financial-account, or other sensitive personal data. No tool asks for any of these.</li>
 </ul>
 
-<h2>How we use this data</h2>
+<h2>2. How we use this data (purposes)</h2>
 <ul>
-<li>Operate, debug, and secure the service</li>
-<li>Understand which tools and packages people use, so we can improve them</li>
-<li>Provide Shield account features, scoped to your own organization</li>
+<li><strong>Provide the tools.</strong> Tool inputs are used to perform the requested lookups and computations and to return outputs to your MCP client. This includes sending package names, versions, file paths, search queries, URLs, domains, and simulation parameters to the services listed in section 3.</li>
+<li><strong>Provide Shield account features.</strong> Account identifiers, scopes, and your forwarded token are used to authenticate signed-in requests and return data scoped to your own organization.</li>
+<li><strong>Operate, debug, and secure the service.</strong> Tool-call logs and technical data are used to diagnose errors, prevent abuse and overload, apply rate limits, and keep the service reliable.</li>
+<li><strong>Improve the service.</strong> Aggregated and individual tool-call logs are used to understand which tools and packages people use and where tools fail or return poor results, so we can prioritize fixes and features.</li>
+<li><strong>Measure website traffic.</strong> Google Analytics data from the landing page is used to understand visits to that page.</li>
 </ul>
+<p>We do <strong>not</strong> use tool inputs, outputs, or logs to train AI models, for advertising, or to profile individuals or make automated decisions about individuals. We do not combine anonymous tool-call data with other data to identify anonymous users.</p>
 
-<h2>Your choices</h2>
+<h2>3. Who receives this data (recipients and sharing)</h2>
 <ul>
-<li>Use the server anonymously: most tools work with no account, and anonymous calls are not tied to a Shield identity.</li>
-<li>Disconnect at any time from your MCP client or by revoking the grant in your Shield account.</li>
+<li><strong>Your MCP client and its AI provider.</strong> Tool outputs are returned to the MCP client/agent you use (for example, OpenAI&rsquo;s ChatGPT when you use this plugin there, or another MCP client). That provider&rsquo;s handling of tool inputs and outputs is governed by its own privacy policy, not this one.</li>
+<li><strong>Cloudflare, Inc. (hosting and logs).</strong> The server runs on Cloudflare Workers. Cloudflare processes technical/network data (section 1.4) and stores our tool-call logs (sections 1.1&ndash;1.3) via Workers Logs and Logpush, as our service provider, under Cloudflare&rsquo;s terms and privacy policy.</li>
+<li><strong>npm registry (<code>registry.npmjs.org</code>, operated by npm/GitHub).</strong> Receives package names and free-text search queries needed to resolve versions and search. These requests are made server-side from our infrastructure; we do not send npm your IP address, account identifiers, dependency map as a set, domains, or page-view/cost figures. npm&rsquo;s handling is governed by its own privacy policy.</li>
+<li><strong>UNPKG (<code>unpkg.com</code>) &mdash; same operator as this server.</strong> Receives package names, versions, and file paths to list and verify files, and the UNPKG URLs you ask us to verify or include in an import map.</li>
+<li><strong>UNPKG Shield API (<code>shield.unpkg.com</code>) &mdash; same operator as this server.</strong> Receives exact package name/version pairs for safety checks (including anonymous <code>shield_check_packages</code> calls and the safety check inside <code>audit_dependencies</code>). For signed-in tools it also receives your OAuth access token (per request, section 1.3), domain names, and simulation inputs (package, version, path, referer, origin), and returns your organization&rsquo;s data to us for delivery to your client. Requests identify themselves as MCP traffic via user-agent headers.</li>
+<li><strong>Google LLC (Google Analytics) &mdash; landing page only.</strong> Receives the website analytics data described in section 1.5 when a browser loads <code>mcp.unpkg.com/</code>. No MCP tool-call data is sent to Google.</li>
+<li><strong>Legal and safety.</strong> We may disclose information if required by law or to protect the rights, safety, and security of UNPKG, our users, or the public.</li>
+<li><strong>Business transfers.</strong> If UNPKG is involved in a merger, acquisition, or asset sale, information may be transferred as part of that transaction, subject to this policy.</li>
+</ul>
+<p>Other than the recipients above, we do not disclose tool-call content, logs, or account identifiers to third parties. We do not sell personal information, and we do not &ldquo;share&rdquo; it for cross-context behavioral advertising (as those terms are used in California law). Shield data returned for one organization is never disclosed to another organization through this server.</p>
+
+<h2>4. Retention</h2>
+<ul>
+<li><strong>No application database or sessions.</strong> The MCP server is stateless: it keeps no per-user database or session store, and tool inputs and outputs exist in memory only for the duration of each request, apart from the logs below and short-lived caches of public npm package metadata (up to 5 minutes; public data only, no user data).</li>
+<li><strong>Tool-call logs</strong> (tool name, timing, inputs, results, and, for signed-in calls, user/organization/client IDs) are retained in our Cloudflare logging systems for up to <strong>90 days</strong>, then deleted or retained only in aggregated form that no longer identifies tool inputs or accounts.</li>
+<li><strong>Technical/network logs</strong> held by Cloudflare are retained for up to 90 days in our logging configuration and otherwise in accordance with Cloudflare&rsquo;s retention practices.</li>
+<li><strong>Google Analytics data</strong> for the landing page is retained by Google for up to <strong>14 months</strong> under our property&rsquo;s data-retention setting, and otherwise per Google&rsquo;s policies.</li>
+<li><strong>Shield account data</strong> (your domains, watchlist, policies, and related records) is held in your Shield account by the Shield service, not stored by this MCP server beyond the tool-call logs above. Deleting or closing a Shield account is handled through Shield.</li>
+<li>We may retain specific log records for longer where needed to investigate abuse or a security incident, or to comply with legal obligations.</li>
 </ul>
 
-<h2>Changes</h2>
-<p>We may update this page as the service evolves. Material changes will be noted by the date above.</p>
+<h2>5. Your choices and controls</h2>
+<ul>
+<li><strong>Use the server anonymously.</strong> All general tools and anonymous package-safety checks work with no account. Anonymous calls carry no Shield user, organization, or client ID in tool-call logs (technical request metadata still applies, section 1.4).</li>
+<li><strong>Control what you send.</strong> You and your agent choose every tool input. You can avoid sending a full dependency map, existing import-map URLs, domains, referer/origin URLs, or page-view/cost figures by not calling the tools that use them, or by omitting optional inputs. Do not send secrets or personal data in tool inputs (section 1.1).</li>
+<li><strong>Disconnect Shield.</strong> Disconnect at any time from your MCP client (logout/remove this server) or by revoking the OAuth grant in your Shield account. Revocation stops future signed-in calls; previously written logs are retained per section 4 unless deletion is requested below.</li>
+<li><strong>Analytics opt-out.</strong> Google Analytics loads only on the website landing page. You can block it with browser cookie settings or a content blocker, or use Google&rsquo;s Analytics opt-out add-on. Using the MCP endpoint involves no analytics cookies.</li>
+<li><strong>Access and deletion.</strong> Email <a href="mailto:support@unpkg.com">support@unpkg.com</a> to request access to or deletion of personal information associated with your Shield account; include your Shield user or organization ID (visible via <code>shield_whoami</code>) so we can locate log records.</li>
+</ul>
 
-<h2>Contact</h2>
-<p>UNPKG — <a href="mailto:support@unpkg.com">support@unpkg.com</a></p>
+<h2>6. Security</h2>
+<p>Traffic to this server is encrypted in transit (HTTPS). Shield tokens are validated against Shield&rsquo;s published signing keys, held only in memory during a request, forwarded only to the Shield API, and never logged or stored. Shield tools can only return data for the organization identified by the validated token; tenant scoping is enforced by the Shield API. Access to production logs is restricted to personnel who operate the service.</p>
+
+<h2>7. International transfers</h2>
+<p>Our providers (including Cloudflare, Google, and npm/GitHub) may process data on servers in the United States and other countries. By using the service, you understand that information may be processed outside your country, where data-protection laws may differ.</p>
+
+<h2>8. Children</h2>
+<p>This service is a developer tool and is not directed to children under 13 (or under 16 where that threshold applies). We do not knowingly collect personal information from children.</p>
+
+<h2>9. Changes</h2>
+<p>We may update this page as the service evolves, including when tool inputs, outputs, recipients, or retention change. Material changes will be noted by the date above. Continued use after an update takes effect constitutes acceptance of the updated policy.</p>
+
+<h2>10. Contact</h2>
+<p>UNPKG &mdash; <a href="mailto:support@unpkg.com">support@unpkg.com</a></p>
 </div></main>
 <footer class="site"><div class="wrap">
 <a href="/">UNPKG MCP</a>
 <a href="https://unpkg.com">unpkg.com</a>
 <a href="https://shield.unpkg.com">UNPKG Shield</a>
+<a href="/terms">Terms</a>
 </div></footer>
 </body></html>`;
 }
 
-function termsHtml(gaId?: string): string {
-  let ga = gaId
-    ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-if (location.hostname === "mcp.unpkg.com") {
-  gtag('js', new Date());
-  gtag('config', '${gaId}');
-}
-</script>`
-    : "";
+function termsHtml(): string {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Terms of Service — UNPKG MCP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -451,7 +502,7 @@ p,li{max-width:46rem}
 .updated{opacity:.75;margin:0 0 1.5rem}
 footer.site{border-top:1px solid var(--hairline);padding:2rem 0 3rem;font-size:.92rem}
 footer.site .wrap{display:flex;gap:1.5rem;flex-wrap:wrap}
-</style>${ga}</head>
+</style></head>
 <body>
 <header class="site"><div class="wrap"><a class="wordmark" href="/">UNPKG <span>MCP</span></a></div></header>
 <main><div class="wrap">
@@ -557,10 +608,10 @@ export default {
       return new Response(landingHtml(env.GA_MEASUREMENT_ID), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
     if (url.pathname === "/privacy" && request.method === "GET") {
-      return new Response(privacyHtml(env.GA_MEASUREMENT_ID), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+      return new Response(privacyHtml(), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
     if (url.pathname === "/terms" && request.method === "GET") {
-      return new Response(termsHtml(env.GA_MEASUREMENT_ID), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+      return new Response(termsHtml(), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
     if (url.pathname === "/robots.txt" && request.method === "GET") {
       return new Response(
